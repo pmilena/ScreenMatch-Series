@@ -1,16 +1,27 @@
 package com.milena.screenmatch.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.zip.DataFormatException;
 
+@Entity
+@Table(name="episodios")
 public class Episodio {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String titulo;
     private Integer numeroEpisodio;
     private Double avaliacao;
     private Integer temporada;
     private LocalDate dataLancamento;
+
+    @ManyToOne
+    private Serie serie;
+
 
     public Episodio(Integer temporada, DadosEpisodio dadosEpisodio) {
 
@@ -29,6 +40,22 @@ public class Episodio {
         } catch (DateTimeParseException e) {
             this.dataLancamento=null;
         }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Serie getSerie() {
+        return serie;
+    }
+
+    public void setSerie(Serie serie) {
+        this.serie = serie;
     }
 
     public String getTitulo() {
