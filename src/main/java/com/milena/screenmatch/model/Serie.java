@@ -14,6 +14,8 @@ public class Serie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String titulo;
     private Integer totalTemporadas;
     private Double avaliacao;
@@ -31,6 +33,7 @@ public class Serie {
     public Serie() {}
 
     public Serie(DadosSerie d){
+
         this.titulo=d.titulo();
         this.totalTemporadas= d.totalTemporadas();
         this.avaliacao= OptionalDouble.of(Double.valueOf(d.avaliacao())).orElse(0);

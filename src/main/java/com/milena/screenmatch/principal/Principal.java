@@ -43,6 +43,8 @@ public class Principal {
                 1- Buscar séries
                 2- Buscar episódios
                 3- Listar séries buscadas
+                4- Buscar série por título
+                5- Buscar série por Ator
                 0- Sair
                 
                 """);
@@ -60,6 +62,14 @@ public class Principal {
 
                 case 3:
                     listaSeries();
+                    break;
+
+                case 4:
+                    buscarSeriePorTitulo();
+                    break;
+
+                case 5:
+                    buscarSeriePorAtor();
                     break;
 
                 case 0:
@@ -101,8 +111,7 @@ public class Principal {
         System.out.println("Digite o nome da série que deseja pesquisar: ");
         var nomeSerie = leitor.nextLine();
 
-        Optional<Serie> serie = series.stream().filter(s -> s.getTitulo().toLowerCase().contains(nomeSerie.toLowerCase()))
-                .findFirst();
+        Optional<Serie> serie = repository.findByTituloContainingIgnoreCase(nomeSerie);
 
         if (serie.isPresent()) {
 
@@ -128,6 +137,32 @@ public class Principal {
         }
 
     }
-}
+    private void buscarSeriePorTitulo(){
+        System.out.println("Digite o nome da série que deseja pesquisar: ");
+        var nomeSerie = leitor.nextLine();
 
+        Optional<Serie> serie = repository.findByTituloContainingIgnoreCase(nomeSerie);
+
+        if (serie.isPresent()){
+            System.out.println("Dados da série: " + serie.get());
+        }else{
+            System.out.println("Série não encontrada.");
+        }
+
+    }
+    public void buscarSeriePorAtor() {
+        System.out.println("Digite o nome do ator que deseja buscar; ");
+        var nomeAtor = leitor.nextLine();
+
+        System.out.println("A partir de qual nota deseja pesquisar? ");
+        var avaliacao = leitor.nextDouble();
+        leitor.nextLine();
+
+        List<Serie> series = repository.findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(nomeAtor,avaliacao);
+        System.out.println("Séries em que " + nomeAtor + " trabalhou:");
+        series.forEach(s-> System.out.println(s.getTitulo() + " avaliação: " + s.getAvaliacao()));
+
+        }
+
+    }
 
