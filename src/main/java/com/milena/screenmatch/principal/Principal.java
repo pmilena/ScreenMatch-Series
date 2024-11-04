@@ -86,7 +86,12 @@ public class Principal {
     private void buscarSerie() throws JsonProcessingException {
         DadosSerie dados = getDadosSerie();
         Serie serie = new Serie(dados);
-        repository.save(serie);
+
+        Optional<Serie> serieExistente = repository.findByTituloContainingIgnoreCase(serie.getTitulo());
+        if (serieExistente.isEmpty()) {
+            repository.save(serie);
+        }
+
         System.out.println(dados);
     }
 
@@ -94,11 +99,12 @@ public class Principal {
         series = repository.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero));
-        series.forEach(System.out::println);
+
+        System.out.println(series);
     }
 
     private DadosSerie getDadosSerie() throws JsonProcessingException {
-        listaSeries();
+        //listaSeries();
         System.out.println("Qual série que deseja pesquisar:");
         String serieEscolhida = leitor.nextLine();
         var json = consumo.obterDados(ENDERECO + serieEscolhida.replace(" ", "+") + API_KEY);
@@ -131,6 +137,7 @@ public class Principal {
                     .collect(Collectors.toList());
 
             serieEncontrada.setEpisodios(episodios);
+
             repository.save(serieEncontrada);
         } else {
             System.out.println("Série não encontrada.");
@@ -151,7 +158,7 @@ public class Principal {
 
     }
     public void buscarSeriePorAtor() {
-        System.out.println("Digite o nome do ator que deseja buscar; ");
+        System.out.println("Digite o nome do ator que deseja buscar: ");
         var nomeAtor = leitor.nextLine();
 
         System.out.println("A partir de qual nota deseja pesquisar? ");
