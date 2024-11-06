@@ -1,16 +1,18 @@
 package com.milena.screenmatch.model;
 
 public enum Categoria {
-    ACAO ("Action"),
-    ROMANCE ("Romance"),
-    DRAMA ("Drama"),
-    CRIME ("Crime"),
-    COMEDIA ("Comedy");
+    ACAO ("Action", "ação"),
+    ROMANCE ("Romance","romance"),
+    DRAMA ("Drama","drama"),
+    CRIME ("Crime","crime"),
+    COMEDIA ("Comedy","comédia");
 
     private String categoriaOmdb;
+    private String categoriaEmPortugues;
 
-    Categoria(String categoriaOmdb){
+    Categoria(String categoriaOmdb, String categoriaEmPortugues){
         this.categoriaOmdb = categoriaOmdb;
+        this.categoriaEmPortugues = categoriaEmPortugues;
     }
 
     public static Categoria fromString(String text) {
@@ -19,7 +21,16 @@ public enum Categoria {
                 return categoria;
             }
         }
-        throw new IllegalArgumentException("Nenhuma categoria encontrada para a string fornecida: " + text);
+        throw new IllegalArgumentException("Nenhuma categoria encontrada para o nome fornecido: " + text);
+    }
+
+    public static Categoria fromPortugues(String text) {
+        for (Categoria categoria : Categoria.values()) {
+            if (categoria.categoriaEmPortugues.equalsIgnoreCase(text)) {
+                return categoria;
+            }
+        }
+        throw new IllegalArgumentException("Nenhuma categoria encontrada para o nome fornecido: " + text);
     }
 
 }

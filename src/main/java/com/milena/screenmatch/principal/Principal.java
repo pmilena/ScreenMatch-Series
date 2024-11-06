@@ -1,10 +1,7 @@
 package com.milena.screenmatch.principal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.milena.screenmatch.model.DadosSerie;
-import com.milena.screenmatch.model.DadosTemporada;
-import com.milena.screenmatch.model.Episodio;
-import com.milena.screenmatch.model.Serie;
+import com.milena.screenmatch.model.*;
 import com.milena.screenmatch.repository.SerieRepository;
 import com.milena.screenmatch.service.ConsumoApi;
 import com.milena.screenmatch.service.ConverteDados;
@@ -45,6 +42,8 @@ public class Principal {
                 3- Listar séries buscadas
                 4- Buscar série por título
                 5- Buscar série por Ator
+                6- Buscar Top 5 séries
+                7- Buscar série por categoria
                 0- Sair
                 
                 """);
@@ -70,6 +69,14 @@ public class Principal {
 
                 case 5:
                     buscarSeriePorAtor();
+                    break;
+
+                case 6:
+                    buscarTop5();
+                    break;
+
+                case 7:
+                    buscarPorCategoria();
                     break;
 
                 case 0:
@@ -171,5 +178,17 @@ public class Principal {
 
         }
 
+    private void buscarTop5() {
+        List<Serie> seriesTop = repository.findTop5ByOrderByAvaliacaoDesc();
+        seriesTop.forEach(s-> System.out.println(s.getTitulo() + " avaliação: " + s.getAvaliacao()));
     }
+
+    private void buscarPorCategoria() {
+        System.out.println("Digite a categoria que deseja pequisar: ");
+        var nomeCategoria = leitor.nextLine();
+        var categoria = Categoria.fromPortugues(nomeCategoria);
+        List<Serie> seriePorCategoria = repository.findByGenero(categoria);
+        seriePorCategoria.forEach(System.out::println);
+    }
+}
 
