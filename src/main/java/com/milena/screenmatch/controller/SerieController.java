@@ -1,5 +1,6 @@
 package com.milena.screenmatch.controller;
 
+import com.milena.screenmatch.dto.EpisodioDTO;
 import com.milena.screenmatch.dto.SerieDTO;
 import com.milena.screenmatch.repository.SerieRepository;
 import com.milena.screenmatch.service.SerieService;
@@ -33,8 +34,24 @@ public class SerieController {
     public List<SerieDTO> obterLancamentos(){
         return service.obterLancamentos();
     }
+
     @GetMapping("/{id}")
     public SerieDTO obterPorId(@PathVariable Long id){
         return service.obterPorId(id);
+    }
+
+    @GetMapping("/{id}/temporadas/todas")
+    public List<EpisodioDTO> obterTodasAsTemporadas(@PathVariable Long id){
+        return service.obterTodasAsTemporadas(id);
+    }
+
+    @GetMapping("/{id}/temporadas/{numero}")
+    public List<EpisodioDTO> obterTodasAsTemporadas(@PathVariable Long id, @PathVariable Long numero){
+        return service.obterEpisodiosPorTemporadas(id, numero);
+    }
+
+    @GetMapping("/categoria/{nomeCategoria}")
+    public List<SerieDTO> obterTodasAsTemporadas(@PathVariable String nomeCategoria){
+        return service.obterSeriePorGenero(nomeCategoria);
     }
 }
